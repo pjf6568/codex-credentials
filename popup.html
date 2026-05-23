@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Codex 认证抓取</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+    }
+
+    body {
+      box-sizing: border-box;
+      width: 380px;
+      margin: 0;
+      padding: 16px;
+      background: #f7f7f8;
+      color: #202123;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      gap: 8px;
+    }
+
+    .brandIcon {
+      width: 24px;
+      height: 24px;
+      flex: 0 0 auto;
+      border-radius: 6px;
+      display: block;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.4;
+    }
+
+    .header-actions {
+      display: flex;
+      flex: 0 0 auto;
+      gap: 6px;
+    }
+
+    p {
+      margin: 8px 0;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    code {
+      background: rgba(0, 0, 0, 0.06);
+      padding: 1px 4px;
+      border-radius: 4px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 12px;
+    }
+    .actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .export-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    button {
+      flex: 1;
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    #grabButton {
+      background: #10a37f;
+      color: #ffffff;
+    }
+
+    .exportButton {
+      background: #ffffff;
+      color: #202123;
+      border: 1px solid #dedee3;
+      font-size: 12px;
+      padding: 8px 10px;
+    }
+
+    .linkButton {
+      flex: 0 0 auto;
+      background: #ffffff;
+      color: #202123;
+      border: 1px solid #dedee3;
+      border-radius: 7px;
+      padding: 6px 8px;
+      font-size: 12px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    #grabButton:disabled {
+      opacity: 0.6;
+      cursor: progress;
+    }
+
+    button.ghost {
+      background: transparent;
+      color: #5f6368;
+      border: 1px solid #dedee3;
+      flex: 0 0 auto;
+      padding: 6px 10px;
+      font-weight: 500;
+      font-size: 12px;
+    }
+
+    #status {
+      min-height: 20px;
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 8px;
+      background: #ffffff;
+      border: 1px solid #dedee3;
+      word-break: break-word;
+      white-space: pre-wrap;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    input[type="text"] {
+      box-sizing: border-box;
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #dedee3;
+      border-radius: 8px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 13px;
+      letter-spacing: 1px;
+      background: #ffffff;
+      color: #202123;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #10a37f;
+    }
+
+    details {
+      margin-top: 12px;
+      font-size: 12px;
+    }
+
+    details summary {
+      cursor: pointer;
+      user-select: none;
+      color: #5f6368;
+    }
+
+    pre#previewContent {
+      max-height: 220px;
+      overflow: auto;
+      margin: 8px 0 0;
+      padding: 8px;
+      background: #ffffff;
+      border: 1px solid #dedee3;
+      border-radius: 6px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 11px;
+      white-space: pre;
+    }
+
+    .hint { color: #5f6368; }
+    .ok { color: #0f7b5f; }
+    .error { color: #b42318; }
+
+    [hidden] { display: none !important; }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: #202123;
+        color: #f7f7f8;
+      }
+
+      #status, pre#previewContent, input[type="text"] {
+        background: #2f3037;
+        color: #f7f7f8;
+        border-color: #565869;
+      }
+
+      code {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .hint, details summary { color: #c5c5d2; }
+
+      button.ghost {
+        color: #c5c5d2;
+        border-color: #565869;
+      }
+
+      .exportButton {
+        background: #2f3037;
+        color: #f7f7f8;
+        border-color: #565869;
+      }
+
+      .linkButton {
+        background: #2f3037;
+        color: #f7f7f8;
+        border-color: #565869;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="brand">
+      <img class="brandIcon" src="icons/codex-48.png" alt="" aria-hidden="true">
+      <h1>Codex 认证抓取</h1>
+    </div>
+    <div class="header-actions" aria-label="外部链接">
+      <button id="followButton" class="linkButton" type="button">关注</button>
+      <button id="shopButton" class="linkButton" type="button">卡网</button>
+    </div>
+  </div>
+<section id="mainSection">
+    <p class="hint">从当前浏览器的 chatgpt.com 登录态读取 OAuth 凭证。抓取成功后选择导出格式，内容会复制到剪贴板。</p>
+
+    <div class="actions">
+      <button id="grabButton" type="button">抓取凭证</button>
+    </div>
+
+    <div id="exportActions" class="export-actions" hidden>
+      <button class="exportButton" type="button" data-export-type="auth">auth.json</button>
+      <button class="exportButton" type="button" data-export-type="cpa">CPA 导出</button>
+      <button class="exportButton" type="button" data-export-type="sub2api">sub2api 导出</button>
+      <button class="exportButton" type="button" data-export-type="cockpit">Cockpit 导出</button>
+    </div>
+
+    <div id="status" role="status" aria-live="polite">先登录 chatgpt.com，然后点击“抓取凭证”。</div>
+
+    <details id="preview" hidden>
+      <summary id="previewSummary">预览导出内容（包含敏感凭证）</summary>
+      <pre id="previewContent"></pre>
+    </details>
+</section>
+  <script src="codex_credentials.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

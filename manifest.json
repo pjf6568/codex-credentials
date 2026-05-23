@@ -1,0 +1,39 @@
+{
+    "manifest_version":  3,
+    "name":  "codex认证抓取",
+    "version":  "2.1.0",
+    "description":  "从浏览器 chatgpt.com 登录态抓取 OAuth access_token，并导出为 auth.json、CPA、sub2api 或 Cockpit 格式。",
+    "permissions":  [
+                        "clipboardWrite",
+                        "downloads"
+                    ],
+    "host_permissions":  [
+                             "https://chatgpt.com/*"
+                         ],
+    "icons":  {
+                  "16":  "icons/codex-16.png",
+                  "32":  "icons/codex-32.png",
+                  "48":  "icons/codex-48.png",
+                  "128":  "icons/codex-128.png"
+              },
+    "action":  {
+                   "default_title":  "codex认证抓取",
+                   "default_popup":  "popup.html",
+                   "default_icon":  {
+                                        "16":  "icons/codex-16.png",
+                                        "32":  "icons/codex-32.png",
+                                        "48":  "icons/codex-48.png",
+                                        "128":  "icons/codex-128.png"
+                                    }
+               },
+    "web_accessible_resources":  [
+                                     {
+                                         "resources":  [
+                                                           "qrcode_for_gh_cddc163373ea_344.jpg"
+                                                       ],
+                                         "matches":  [
+                                                         "\u003call_urls\u003e"
+                                                     ]
+                                     }
+                                 ]
+}
