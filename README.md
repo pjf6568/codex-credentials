@@ -8,6 +8,7 @@
 
 - 从 `https://chatgpt.com/api/auth/session` 读取当前浏览器登录态中的 OAuth `access_token`
 - 支持复制到剪贴板并同时下载 JSON 文件
+- 支持检查 GitHub 最新版本并下载更新包
 - 支持导出格式：
   - `auth.json`
   - `CPA` / CLIProxyAPI 兼容格式
@@ -37,6 +38,10 @@
    - 下载对应 `.json` 文件
 4. 如需给 Codex CLI 使用，请把 `auth.json` 放到对应系统的 Codex 配置目录。
 
+## 更新
+
+点击面板右上角“更新”会检查 GitHub 仓库中的最新版本。由于 Chrome / Edge 不允许扩展在运行时覆盖自己的安装文件，按钮会在发现新版本时下载最新 ZIP。下载后请解压覆盖本地插件目录，再到扩展管理页点击重新加载。
+
 ## 文件名规则
 
 - `auth.json`
@@ -52,6 +57,7 @@
 - `clipboardWrite`：复制导出的 JSON 到剪贴板
 - `downloads`：下载导出的 JSON 文件
 - `https://chatgpt.com/*`：读取当前登录态的 session 接口
+- `https://raw.githubusercontent.com/*`：检查 GitHub 最新版本
 
 ## 格式来源
 
@@ -74,6 +80,7 @@ A lightweight Chrome Manifest V3 extension that reads Codex OAuth credentials fr
 
 - Reads the OAuth `access_token` from `https://chatgpt.com/api/auth/session`
 - Copies exported JSON to the clipboard and downloads it as a file
+- Checks the latest GitHub version and downloads the update package
 - Supported export formats:
   - `auth.json`
   - `CPA` / CLIProxyAPI-compatible format
@@ -103,6 +110,10 @@ A lightweight Chrome Manifest V3 extension that reads Codex OAuth credentials fr
    - download the JSON file
 4. For Codex CLI, place `auth.json` in the Codex config directory for your OS.
 
+## Updates
+
+Click `更新` / `Update` in the popup header to check the latest version on GitHub. Chrome / Edge extensions cannot overwrite their own installed files at runtime, so the button downloads the latest ZIP when a newer version exists. Unzip it over the local extension folder, then reload the extension from the extensions page.
+
 ## Download File Names
 
 - `auth.json`
@@ -118,6 +129,7 @@ If the email address is unavailable, the extension falls back to `account_id` or
 - `clipboardWrite`: copy exported JSON to the clipboard
 - `downloads`: download exported JSON files
 - `https://chatgpt.com/*`: access the current browser session endpoint
+- `https://raw.githubusercontent.com/*`: check the latest GitHub version
 
 ## Format References
 

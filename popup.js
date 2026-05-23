@@ -4,6 +4,7 @@
   const grabButton = document.getElementById('grabButton');
   const followButton = document.getElementById('followButton');
   const shopButton = document.getElementById('shopButton');
+  const updateButton = document.getElementById('updateButton');
   const exportActions = document.getElementById('exportActions');
   const status = document.getElementById('status');
   const preview = document.getElementById('preview');
@@ -22,6 +23,8 @@
   };
   const followImagePath = 'qrcode_for_gh_cddc163373ea_344.jpg';
   const shopUrl = 'https://pay.ldxp.cn/shop/QO8R0ZFF';
+  const updateManifestUrl = 'https://raw.githubusercontent.com/pjf6568/codex-credentials/main/manifest.json';
+  const updateZipUrl = 'https://github.com/pjf6568/codex-credentials/archive/refs/heads/main.zip';
   const exportFileNames = {
     auth: 'auth.json',
   };
@@ -72,6 +75,58 @@
     exportActions.querySelectorAll('button').forEach((button) => {
       button.disabled = isBusy;
     });
+  }
+
+  function compareVersions(left, right) {
+    const leftParts = `${left || ''}`.split('.').map((part) => Number.parseInt(part, 10) || 0);
+    const rightParts = `${right || ''}`.split('.').map((part) => Number.parseInt(part, 10) || 0);
+    const length = Math.max(leftParts.length, rightParts.length);
+    for (let index = 0; index < length; index += 1) {
+      const diff = (leftParts[index] || 0) - (rightParts[index] || 0);
+      if (diff !== 0) return diff > 0 ? 1 : -1;
+    }
+    return 0;
+  }
+
+  async function checkForUpdate() {
+    updateButton.disabled = true;
+    setStatus('正在检查 GitHub 最新版本...', 'hint');
+
+    try {
+      const currentVersion = chrome.runtime.getManifest().version;
+      const response = await fetch(updateManifestUrl, { cache: 'no-store' });
+      if (!response.ok) {
+        throw new Error(`检查更新失败: HTTP ${response.status}`);
+      }
+
+      const remoteManifest = await response.json();
+      const latestVersion = remoteManifest && remoteManifest.version;
+      if (typeof latestVersion !== 'string' || !latestVersion) {
+        throw new Error('远程 manifest.json 没有有效版本号。');
+      }
+
+      if (compareVersions(latestVersion, currentVersion) <= 0) {
+        setStatus(`当前已是最新版本: v${currentVersion}`, 'ok');
+        return;
+      }
+
+      await chrome.downloads.download({
+        url: updateZipUrl,
+        filename: `codex-credentials-v${latestVersion}.zip`,
+        conflictAction: 'uniquify',
+        saveAs: true,
+      });
+      setStatus(
+        `发现新版本 v${latestVersion}，已开始下载更新包。\n当前版本: v${currentVersion}\n下载后请解压覆盖本地插件目录，再到扩展管理页点击重新加载。`,
+        'ok',
+      );
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      setStatus(`${message}\n也可以直接打开 GitHub 仓库手动下载最新版本。`, 'error');
+      window.open('https://github.com/pjf6568/codex-credentials', '_blank', 'noopener');
+    } finally {
+      updateButton.disabled = false;
+    }
   }
 
   function formatExpiry(iso) {
@@ -222,6 +277,7 @@
   shopButton.addEventListener('click', () => {
     window.open(shopUrl, '_blank', 'noopener');
   });
+  updateButton.addEventListener('click', checkForUpdate);
   exportActions.addEventListener('click', (event) => {
     const target = event.target;
     if (!(target instanceof HTMLButtonElement)) return;

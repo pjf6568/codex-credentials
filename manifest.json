@@ -1,14 +1,15 @@
 {
     "manifest_version":  3,
     "name":  "codex认证抓取",
-    "version":  "2.2.0",
+    "version":  "2.3.0",
     "description":  "从浏览器 chatgpt.com 登录态抓取 OAuth access_token，并导出为 auth.json、CPA、sub2api、Cockpit 或 CC Switch 格式。",
     "permissions":  [
                         "clipboardWrite",
                         "downloads"
                     ],
     "host_permissions":  [
-                             "https://chatgpt.com/*"
+                             "https://chatgpt.com/*",
+                             "https://raw.githubusercontent.com/*"
                          ],
     "icons":  {
                   "16":  "icons/codex-16.png",
