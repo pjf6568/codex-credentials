@@ -18,6 +18,7 @@
     cpa: 'CPA 导出',
     sub2api: 'sub2api 导出',
     cockpit: 'Cockpit 导出',
+    ccswitch: 'CC Switch 导出',
   };
   const followImagePath = 'qrcode_for_gh_cddc163373ea_344.jpg';
   const shopUrl = 'https://pay.ldxp.cn/shop/QO8R0ZFF';
@@ -53,6 +54,9 @@
     }
     if (exportType === 'cockpit') {
       return `codex-cockpit-${email}.json`;
+    }
+    if (exportType === 'ccswitch') {
+      return `codex-ccswitch-${email}.json`;
     }
     return `codex-credentials-${email}.json`;
   }
@@ -103,6 +107,9 @@
     }
     if (exportType === 'cockpit') {
       return '可导入 Cockpit Tools 的 Codex 账号。';
+    }
+    if (exportType === 'ccswitch') {
+      return 'CC Switch 使用位置: ~/.cc-switch/codex_oauth_auth.json。请在 CC Switch 退出后备份原文件再替换或合并。';
     }
     return '';
   }

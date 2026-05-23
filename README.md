@@ -13,6 +13,7 @@
   - `CPA` / CLIProxyAPI 兼容格式
   - `sub2api` 兼容格式
   - `Cockpit Tools` 兼容格式
+  - `CC Switch` Codex OAuth 兼容格式
 - 缺失 `refresh_token` 时按空字符串导出：`"refresh_token": ""`
 - 根据系统提示 Codex CLI 的 `auth.json` 保存位置
   - macOS / Linux：`~/.codex/auth.json`
@@ -42,6 +43,7 @@
 - `codex-cpa-邮箱名.json`
 - `codex-sub2api-邮箱名.json`
 - `codex-cockpit-邮箱名.json`
+- `codex-ccswitch-邮箱名.json`
 
 如果邮箱不可用，会使用 `account_id` 或 `unknown` 作为文件名后缀。
 
@@ -58,6 +60,7 @@
 - OpenAI Codex CLI 认证结构
 - CLIProxyAPI / CPA 的 Codex token storage 结构
 - Cockpit Tools 的 Codex portable export / sub2api export 格式
+- CC Switch 的 `codex_oauth_auth.json` Codex OAuth 持久化结构
 
 ---
 
@@ -76,6 +79,7 @@ A lightweight Chrome Manifest V3 extension that reads Codex OAuth credentials fr
   - `CPA` / CLIProxyAPI-compatible format
   - `sub2api`-compatible format
   - `Cockpit Tools`-compatible format
+  - `CC Switch` Codex OAuth-compatible format
 - Exports missing `refresh_token` values as an empty string: `"refresh_token": ""`
 - Shows the Codex CLI `auth.json` target path by operating system
   - macOS / Linux: `~/.codex/auth.json`
@@ -105,6 +109,7 @@ A lightweight Chrome Manifest V3 extension that reads Codex OAuth credentials fr
 - `codex-cpa-email.json`
 - `codex-sub2api-email.json`
 - `codex-cockpit-email.json`
+- `codex-ccswitch-email.json`
 
 If the email address is unavailable, the extension falls back to `account_id` or `unknown`.
 
@@ -121,3 +126,4 @@ The export formats are based on the official or project-side structures for:
 - OpenAI Codex CLI authentication
 - CLIProxyAPI / CPA Codex token storage
 - Cockpit Tools Codex portable export and sub2api export formats
+- CC Switch `codex_oauth_auth.json` Codex OAuth storage

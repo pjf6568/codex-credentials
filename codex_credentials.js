@@ -316,6 +316,26 @@
     ];
   }
 
+  function buildCcSwitchExport(sessionData, options = {}) {
+    const context = createCredentialContext(sessionData, options);
+    const account = {
+      account_id: context.accountId,
+      refresh_token: context.refreshToken || '',
+      authenticated_at: Math.floor(Date.now() / 1000),
+    };
+    if (context.email) {
+      account.email = context.email;
+    }
+
+    return {
+      version: 1,
+      accounts: {
+        [context.accountId]: account,
+      },
+      default_account_id: context.accountId,
+    };
+  }
+
   function buildExport(sessionData, exportType, options = {}) {
     if (exportType === 'auth') {
       return buildAuthFile(sessionData, options).auth;
@@ -328,6 +348,9 @@
     }
     if (exportType === 'cockpit') {
       return buildCockpitExport(sessionData, options);
+    }
+    if (exportType === 'ccswitch') {
+      return buildCcSwitchExport(sessionData, options);
     }
     throw new Error(`未知导出类型: ${exportType}`);
   }
@@ -349,6 +372,7 @@
     OPENAI_AUTH_CLAIM,
     SESSION_ENDPOINT,
     buildAuthFile,
+    buildCcSwitchExport,
     buildCpaExport,
     buildCockpitExport,
     buildExport,
